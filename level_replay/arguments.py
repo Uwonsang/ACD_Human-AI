@@ -296,7 +296,7 @@ parser.add_argument(
 parser.add_argument(
     "--layouts_dir",
     type=str,
-    default="/data/overcooked_layout",
+    default="./overcooked_ai/overcooked_ai_py/data/layouts",
     help="overcooked_layout_path")
 parser.add_argument(
     "--layouts_type",

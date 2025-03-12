@@ -124,9 +124,9 @@ def hamming_eqaul_distance(individual1, individual2):
     return distance
 
 if __name__ == "__main__":
-    # layout_path = "/data/overcooked_layout/big_4"
-    # Levelplanner(layout_path)
     layout_path = "/data/overcooked_layout/big_4_fix"
+    Levelplanner(layout_path)
+    # layout_path = "/data/overcooked_layout/big_4_fix"
     # error_list = ['2346_processed', '3256_processed', '3263_processed', '3493_processed', '35_processed']
     # change_layout_info(layout_path, error_list)
-    build_hamming_list(layout_path)
+    # build_hamming_list(layout_path)
