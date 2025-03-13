@@ -23,31 +23,43 @@ bash ./install.sh
 ### Option 2: Using Docker
 ```
 # Pull the Docker image
-docker pull wilf93/overcooked_plr:v1
+docker pull wilf93/overcooked_plr:v2
 
 # Run the container with GPU support
-docker run -it --rm --gpus all --name  <container_name> -v /<host_path>:/<container_path> wilf93/overcooked_plr:v1
-
+docker run -it --rm --gpus all --name  <container_name> -v /<host_path>:/<container_path> wilf93/overcooked_plr:v2
 ```
+
+## Environment Setup & Preparing
+### Activate Environment
+```
+source activate overcooked_plr
+```
+### Make human proxy planner
+```
+python overcooked_pcg/make_planner.py
+```
+
 
 ## Training
-
+### Random
 ```
-# activate env
-source activate overcooked_plr
-
-# run code (overcooked)
-python -m train --env_name Overcooked \
---num_processes=50 \
---level_replay_strategy=return \
---level_replay_score_transform=min \
---level_replay_temperature=0.1 \
---staleness_coef=0.5 \
---log_interval 50 \
---num_env_steps 50000000 \
---use_wandb \
+bash ./run/ppo/plr_random.sh
 ```
 
+### Prioritized Level Replay (PLR)
+```
+bash ./run/ppo/plr_td.sh
+```
+
+### MAESTRO
+```
+bash ./run/ppo/plr_random.sh
+```
+
+### Our Method
+```
+bash ./run/ppo/plr_random.sh
+```
 
 ## Acknowledgements
 This code references by Prioritized Level Replay implementation (https://github.com/facebookresearch/level-replay)
@@ -55,8 +67,7 @@ and the Overcooked implementation (https://github.com/HumanCompatibleAI/human_aw
 
 
 ## License
-
-
+The code in this repository is released under Creative Commons Attribution-NonCommercial 4.0 International License (CC-BY-NC 4.0).
 
 
 ## Contact
