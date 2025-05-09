@@ -40,15 +40,15 @@ def overall_figure(result_dir, save_dir, args):
         file_names = {
             'Ours': 'scientific_reports_3.pbt_return vs Proxy_sparse.csv',
             'MAESTRO': 'scientific_reports_3.pbt_td vs Proxy_sparse.csv',
-            'PLR(return)': 'scientific_reports_2.plr_return vs Proxy_sparse.csv',
-            'PLR': 'scientific_reports_2.plr_td vs Proxy_sparse.csv'
+            'Robust PLR(return)': 'scientific_reports_2.plr_return vs Proxy_sparse.csv',
+            'Robust PLR': 'scientific_reports_2.plr_td vs Proxy_sparse.csv'
         }
     else:
         file_names = {
             'Ours': 'scientific_reports_3.pbt_return vs Proxy.csv',
             'MAESTRO': 'scientific_reports_3.pbt_td vs Proxy.csv',
-            'PLR(return)': 'scientific_reports_2.plr_return vs Proxy.csv',
-            'PLR': 'scientific_reports_2.plr_td vs Proxy.csv'
+            'Robust PLR(return)': 'scientific_reports_2.plr_return vs Proxy.csv',
+            'Robust PLR': 'scientific_reports_2.plr_td vs Proxy.csv'
         }
 
     file_paths = {name: os.path.join(result_dir, file) for name, file in file_names.items()}
