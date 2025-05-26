@@ -66,7 +66,7 @@ def training_eval_plot(data_path, args):
     plt.rc('legend', fontsize=20)
     plt.rc('figure', titlesize=20)
 
-    plt.xlabel("Number of ego agent Updates (in K)", fontsize=30)
+    plt.xlabel("Number of ego-agent Updates (in K)", fontsize=30)
     plt.ylabel("Episode reward", fontsize=30)
     plt.legend(loc='upper left')
     plt.tight_layout()
