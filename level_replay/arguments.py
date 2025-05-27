@@ -256,12 +256,6 @@ parser.add_argument(
     type=int,
     default=2,
     help="set the lstm layer number")
-parser.add_argument(
-    "--latent_dim",
-    type=int,
-    default=64,
-    help="E3T latent_dim"
-)
 # Overcooked arguments
 parser.add_argument(
     "--episode_length",

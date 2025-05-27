@@ -9,7 +9,7 @@ import torch
 from level_replay import utils
 from level_replay.envs import make_lr_venv
 from level_replay.arguments import parser
-from test import evaluate, evaluate_e3t
+from test import evaluate
 from tqdm import tqdm
 import time
 import wandb
