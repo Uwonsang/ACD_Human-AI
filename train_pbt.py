@@ -240,8 +240,8 @@ def train(args, seeds):
             # Log stats every log_interval updates or if it is the last update
             if (ppo_update_step % (ppo_num_updates * args.log_interval) == 0 and len(epi_rewards) > 1) or total_ppo_update_num == (ppo_update_step * (args.population_size * (num_updates - 1))):
 
-                eval_epi_rewards, eval_epi_rewards_p1, eval_epi_rewards_p2, eval_episode_sparse_reward = evaluate_e3t(args, ego_agent.model, args.num_test_seeds, device, eval_envs, num_processes=args.num_processes_test, use_render=False, store_traj=False, co_player=co_model)
-                train_eval_epi_rewards, train_eval_epi_rewards_p1, train_eval_epi_rewards_p2, train_eval_episode_sparse_reward = evaluate_e3t(
+                eval_epi_rewards, eval_epi_rewards_p1, eval_epi_rewards_p2, eval_episode_sparse_reward = evaluate(args, ego_agent.model, args.num_test_seeds, device, eval_envs, num_processes=args.num_processes_test, use_render=False, store_traj=False, co_player=co_model)
+                train_eval_epi_rewards, train_eval_epi_rewards_p1, train_eval_epi_rewards_p2, train_eval_episode_sparse_reward = evaluate(
                     args, ego_agent.model, args.num_test_seeds, device, train_eval_envs, level_sampler=train_eval_level_sampler,
                     num_processes=args.num_processes_test, use_render=False, store_traj=False, co_player=co_model)
 
