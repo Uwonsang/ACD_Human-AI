@@ -1,6 +1,6 @@
 import os
 from level_replay.arguments import parser
-from test import evaluate, evaluate_e3t
+from test import evaluate
 from level_replay import utils
 
 import time
@@ -8,7 +8,7 @@ import numpy as np
 import torch
 from tqdm import tqdm
 
-from level_replay.model import OvercookedPolicy_E3T, OvercookedPolicy
+from level_replay.model import OvercookedPolicy
 from level_replay.envs import make_lr_venv
 import pandas as pd
 from level_replay.utils import get_target_list
@@ -116,7 +116,7 @@ def save_print_result(args, result_list, result_var_list, sparse_result_list, sp
     print(" ")
 
 
-def eval_ego_proxy(args, model, checkpoint_list, device, repeat_num, visualize, eval_envs, is_e3t):
+def eval_ego_proxy(args, model, checkpoint_list, device, repeat_num, visualize, eval_envs):
 
     while True:
         print("\n Ego vs Proxy")
@@ -147,10 +147,7 @@ def eval_ego_proxy(args, model, checkpoint_list, device, repeat_num, visualize, 
             seed_result_list = []
             sparse_seed_result_list = []
             for i in tqdm(range(repeat_num)):
-                if is_e3t:
-                    eval_episode_rewards, _, _, eval_episode_sparse_reward = evaluate_e3t(args, model, args.final_num_test_seeds, device, eval_envs=eval_envs, num_processes=args.num_processes_test, use_render=False, store_traj=False)
-                else:
-                    eval_episode_rewards, _, _, eval_episode_sparse_reward = evaluate(args, model, args.final_num_test_seeds, device, eval_envs=eval_envs, num_processes=args.num_processes_test, use_render=False, store_traj=False)
+                eval_episode_rewards, _, _, eval_episode_sparse_reward = evaluate(args, model, args.final_num_test_seeds, device, eval_envs=eval_envs, num_processes=args.num_processes_test, use_render=False, store_traj=False)
                 seed_result_list.append(eval_episode_rewards)
                 sparse_seed_result_list.append(eval_episode_sparse_reward)
             seed_result_list = np.array(seed_result_list)
@@ -172,7 +169,7 @@ def eval_ego_proxy(args, model, checkpoint_list, device, repeat_num, visualize, 
         save_print_result(args, result_list, result_var_list, sparse_result_list, sparse_result_var_list, repeat_num, test_name)
 
 
-def eval_ego_ego(args, model, co_model, checkpoint_list, device, repeat_num, visualize, eval_envs, is_e3t):
+def eval_ego_ego(args, model, co_model, checkpoint_list, device, repeat_num, visualize, eval_envs):
     while True:
         print("\n Ego vs Ego")
         print("\n<Ego Agent List>")
@@ -205,10 +202,7 @@ def eval_ego_ego(args, model, co_model, checkpoint_list, device, repeat_num, vis
             seed_result_list = []
             sparse_seed_result_list = []
             for i in tqdm(range(repeat_num)):
-                if is_e3t:
-                    eval_episode_rewards, _, _, eval_episode_sparse_reward = evaluate_e3t(args, model, args.final_num_test_seeds, device, eval_envs=eval_envs, num_processes=args.num_processes_test, use_render=False, store_traj=False, co_player=co_model)
-                else:
-                    eval_episode_rewards, _, _, eval_episode_sparse_reward = evaluate(args, model, args.final_num_test_seeds, device, eval_envs=eval_envs, co_player=co_model)
+                eval_episode_rewards, _, _, eval_episode_sparse_reward = evaluate(args, model, args.final_num_test_seeds, device, eval_envs=eval_envs, co_player=co_model)
                 seed_result_list.append(eval_episode_rewards)
                 sparse_seed_result_list.append(eval_episode_sparse_reward)
             seed_result_list = np.array(seed_result_list)
@@ -228,7 +222,7 @@ def eval_ego_ego(args, model, co_model, checkpoint_list, device, repeat_num, vis
         save_print_result(args, result_list, result_var_list, sparse_result_list, sparse_result_var_list, repeat_num, test_name)
 
 
-def eval_proxy_proxy(args, model, checkpoint_list, device, repeat_num, visualize, eval_envs, is_e3t):
+def eval_proxy_proxy(args, model, checkpoint_list, device, repeat_num, visualize, eval_envs):
     x = 1
     
     result_list = []
@@ -249,11 +243,6 @@ def eval_proxy_proxy(args, model, checkpoint_list, device, repeat_num, visualize
         seed_result_list = []
         sparse_seed_result_list = []
         for i in tqdm(range(repeat_num)):
-            if is_e3t:
-                eval_episode_rewards, _, _, eval_episode_sparse_reward = evaluate_e3t(args, model, args.final_num_test_seeds, device, eval_envs=eval_envs, num_processes=args.num_processes_test, use_render=False, store_traj=False)
-            else:
-                eval_episode_rewards, _, _, eval_episode_sparse_reward = evaluate(args, model, args.final_num_test_seeds, device, eval_envs=eval_envs)
-                
             eval_episode_rewards, _, _, eval_episode_sparse_reward = evaluate(args, model, args.final_num_test_seeds, device, eval_envs=eval_envs)
             seed_result_list.append(eval_episode_rewards)
             sparse_seed_result_list.append(eval_episode_sparse_reward)
@@ -276,7 +265,7 @@ def eval_proxy_proxy(args, model, checkpoint_list, device, repeat_num, visualize
     save_print_result(args, result_list, result_var_list, sparse_result_list, sparse_result_var_list, repeat_num, test_name)
 
         
-def eval_ego_co_player(args, model, co_model, checkpoint_list, device, repeat_num, visualize, eval_envs, is_e3t):
+def eval_ego_co_player(args, model, co_model, checkpoint_list, device, repeat_num, visualize, eval_envs):
     model_file_names = "model.tar"
     _, co_player_list = get_target_list(overcooked_result_dir, model_file_names)
     
@@ -325,10 +314,7 @@ def eval_ego_co_player(args, model, co_model, checkpoint_list, device, repeat_nu
                 co_model.to(device)
                 
                 for i in tqdm(range(repeat_num)):
-                    if is_e3t:
-                        eval_episode_rewards, _, _, eval_episode_sparse_reward = evaluate_e3t(args, model, args.final_num_test_seeds, device, eval_envs=eval_envs, num_processes=args.num_processes_test, use_render=False, store_traj=False, co_player=co_model)
-                    else:
-                        eval_episode_rewards, _, _, eval_episode_sparse_reward = evaluate(args, model, args.final_num_test_seeds, device, eval_envs=eval_envs, co_player=co_model)
+                    eval_episode_rewards, _, _, eval_episode_sparse_reward = evaluate(args, model, args.final_num_test_seeds, device, eval_envs=eval_envs, co_player=co_model)
                     seed_result_list.append(eval_episode_rewards)
                     sparse_seed_result_list.append(eval_episode_sparse_reward)
             seed_result_list = np.array(seed_result_list)
@@ -348,24 +334,20 @@ def eval_ego_co_player(args, model, co_model, checkpoint_list, device, repeat_nu
         save_print_result(args, result_list, result_var_list, sparse_result_list, sparse_result_var_list, repeat_num, test_name)
 
 
-def eval_saved_model(args, checkpoint_list, device, test_method, repeat_num=50, visualize=False, is_e3t=True):   
+def eval_saved_model(args, checkpoint_list, device, test_method, repeat_num=50, visualize=False):
 
     eval_envs = make_eval_env(args=args, test_method=test_method)
-    if is_e3t:
-        model = OvercookedPolicy_E3T(eval_envs.observation_space.shape, eval_envs.action_space.n, args).to(device)
-        co_model = OvercookedPolicy_E3T(eval_envs.observation_space.shape, eval_envs.action_space.n, args).to(device)
-    else:
-        model = OvercookedPolicy(eval_envs.observation_space.shape, eval_envs.action_space.n, args)
-        co_model = OvercookedPolicy(eval_envs.observation_space.shape, eval_envs.action_space.n, args)
-    
+    model = OvercookedPolicy(eval_envs.observation_space.shape, eval_envs.action_space.n, args)
+    co_model = OvercookedPolicy(eval_envs.observation_space.shape, eval_envs.action_space.n, args)
+
     if test_method == 1:
-        eval_ego_proxy(args, model, checkpoint_list, device, repeat_num, visualize, eval_envs, is_e3t)
+        eval_ego_proxy(args, model, checkpoint_list, device, repeat_num, visualize, eval_envs)
     elif test_method == 2:
-        eval_ego_ego(args, model, co_model, checkpoint_list, device, repeat_num, visualize, eval_envs, is_e3t)
+        eval_ego_ego(args, model, co_model, checkpoint_list, device, repeat_num, visualize, eval_envs)
     elif test_method == 3:
-        eval_ego_co_player(args, model, co_model, checkpoint_list, device, repeat_num, visualize, eval_envs, is_e3t)
+        eval_ego_co_player(args, model, co_model, checkpoint_list, device, repeat_num, visualize, eval_envs)
     else:
-        eval_proxy_proxy(args, model, checkpoint_list, device, repeat_num, visualize, eval_envs, is_e3t)
+        eval_proxy_proxy(args, model, checkpoint_list, device, repeat_num, visualize, eval_envs)
         
 
 if __name__ == "__main__":
@@ -380,9 +362,9 @@ if __name__ == "__main__":
     
     test_method, test_name = select_test_method()
     
-    overcooked_result_dir = "/data/overcooked_plr/overcooked_result/scientific_reports/"
+    overcooked_result_dir = "/data/overcooked_plr/overcooked_result/IEEE_ACCESS/"
     args.xpid = "lr-%s-%s" % (time.strftime("%Y%m%d-%H%M%S"), test_name)
 
     _, checkpoint_list = get_target_list(overcooked_result_dir, "model.tar")
 
-    eval_saved_model(args, checkpoint_list, device, test_method, repeat_num=1, visualize=False, is_e3t=False)
+    eval_saved_model(args, checkpoint_list, device, test_method, repeat_num=1, visualize=False)
