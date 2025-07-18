@@ -83,7 +83,7 @@ def process_results(results):
 
 
 
-def simple_t_test(data, args):
+def simple_user_t_test(data, args):
     methods_mapping = {"pbt-return": "Ours", "pbt-td": "MAESTRO", "plr-td": "Robust_PLR", "random-random": "Random"}
     data["Mapped Method"] = data["Method"] + "-" + data["Category"]
     data["Mapped Method"] = data["Mapped Method"].map(methods_mapping)
@@ -95,13 +95,33 @@ def simple_t_test(data, args):
 
     t_stat, p_value = stats.ttest_rel(values1, values2)
 
+    print(f"Target_map:{args.target_map}")
     print(f"T-test Results: {args.method1} vs {args.method2}")
     print({"t-statistic": t_stat, "p-value": p_value})
 
 
+def run_all_user_t_tests(data):
+    methods_mapping = {"pbt-return": "Ours", "pbt-td": "MAESTRO", "plr-td": "Robust_PLR", "random-random": "Random"}
+    data["Mapped Method"] = data["Method"] + "-" + data["Category"]
+    data["Mapped Method"] = data["Mapped Method"].map(methods_mapping)
+
+    target_methods = ["MAESTRO", "Robust_PLR", "Random"]
+    all_maps = ['6050_processed', '6051_processed', '6052_processed', '6053_processed', '6054_processed']
+
+    for target_map in all_maps:
+        df = data[data["Map"] == target_map]
+        values_ours = df[df["Mapped Method"] == "Ours"]['Score'].values
+
+        print(f"\n=== Map: {target_map} ===")
+        for method in target_methods:
+            values_other = df[df["Mapped Method"] == method]['Score'].values
+            t_stat, p_value = stats.ttest_rel(values_ours, values_other)
+            print(f"Ours vs {method}: t = {t_stat:.4f}, p = {p_value:.4f}")
+
 if __name__ == "__main__":
     args = parse_args()
-    result_dir = "Z:/overcooked_plr/overcooked_result/scientific_reports/user_study_result"
+    result_dir = "Z:/overcooked_plr/overcooked_result/IEEE_ACCESS/user_study_result"
     results = load_results(result_dir, args)
     final_data = process_results(results)
-    simple_t_test(final_data, args)
+    # simple_user_t_test(final_data, args)
+    run_all_user_t_tests(final_data)
