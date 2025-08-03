@@ -34,6 +34,7 @@ def read_and_process_csv_split(file_path):
 
 
 def overall_figure(result_dir, save_dir, args):
+    plt.rcParams.update({'font.size': 16})
     make_dir(save_dir)
 
     if args.is_sparse:

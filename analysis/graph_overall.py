@@ -34,6 +34,7 @@ def read_and_process_csv_split(file_path):
 
 
 def overall_figure(result_dir, save_dir, args):
+    plt.rcParams.update({'font.size': 16})
     make_dir(save_dir)
 
     if args.is_sparse:
@@ -52,6 +53,7 @@ def overall_figure(result_dir, save_dir, args):
         }
 
     file_paths = {name: os.path.join(result_dir, file) for name, file in file_names.items()}
+    print("file_paths", file_paths)
 
 
     if args.figure_type == "split":
@@ -108,6 +110,6 @@ def overall_figure(result_dir, save_dir, args):
 
 if __name__ == "__main__":
     args = parse_args()
-    overcooked_result_dir = "/data/overcooked_plr/overcooked_result/scientific_reports/result/Ego_Proxy"
+    overcooked_result_dir = "/data/overcooked_plr/overcooked_result/IEEE_ACCESS/result/Ego_Proxy"
     save_dir = '/app/analysis/figure/overall/'
     overall_figure(overcooked_result_dir, save_dir, args)

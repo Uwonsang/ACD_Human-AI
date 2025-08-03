@@ -22,6 +22,7 @@ def smooth_data_sma(data, window=5):
 
 
 def training_eval_plot(data_path, args):
+    plt.rcParams.update({'font.size': 30})
 
     if args.is_eval:
         file_names = {

@@ -126,6 +126,7 @@ def plot_results(final_data, args):
 
 
 def overall_figure(result_dir, save_dir, args):
+    plt.rcParams.update({'font.size': 16})
     make_dir(save_dir)
     results = load_results(result_dir, args)
     final_data = process_results(results)
@@ -134,6 +135,6 @@ def overall_figure(result_dir, save_dir, args):
 
 if __name__ == "__main__":
     args = parse_args()
-    overcooked_result_dir = "Z:/overcooked_plr/overcooked_result/scientific_reports/user_study_result"
+    overcooked_result_dir = "/data/overcooked_plr/overcooked_result/IEEE_ACCESS/user_study_result"
     save_dir = './figure/human_study'
     overall_figure(overcooked_result_dir, save_dir, args)
